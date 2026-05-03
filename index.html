@@ -58,6 +58,7 @@
   .hi-cat{font-size:0.6rem;padding:2px 7px;border-radius:10px;font-weight:600}
   .hi-cat.comida{background:#002a1a;color:#06d6a0}
   .hi-cat.antojo{background:#2a1f00;color:#ffd166}
+  .hi-cat.bebidas{background:#0a1a2a;color:#66b3ff}
   .hi-desc{font-size:0.8rem}
   .hi-date{font-size:0.6rem;color:#555}
   .hi-amt{font-size:0.8rem;font-weight:600;color:#ff6b6b}
@@ -100,7 +101,7 @@
   <div class="card">
     <div class="card-label">Agregar pedido</div>
     <div class="form-row">
-      <select class="category-select" id="catInput"><option value="comida">🍽️ Comida</option><option value="antojo">🧁 Antojo</option></select>
+      <select class="category-select" id="catInput"><option value="comida">🍽️ Comida</option><option value="antojo">🧁 Antojo</option><option value="bebidas">🥤 Bebidas</option></select>
       <input type="text" id="descInput" placeholder="Ej: PedidoYa Burger" maxlength="35">
     </div>
     <div class="form-row">
@@ -213,7 +214,7 @@ async function init(){
 // --- Actions ---
 async function addExpense(){
   const cat=document.getElementById('catInput').value;
-  const desc=document.getElementById('descInput').value.trim()||(cat==='comida'?'Comida':'Antojo');
+  const desc=document.getElementById('descInput').value.trim()||(cat==='comida'?'Comida':cat==='antojo'?'Antojo':'Bebida');
   const amt=parseInt(document.getElementById('amtInput').value);
   if(!amt||amt<=0)return;
   const item={cat,desc,amt,ts:Date.now()};
@@ -228,7 +229,7 @@ async function addExpense(){
 
 async function quickAdd(amt){
   const cat=document.getElementById('catInput').value;
-  const item={cat,desc:cat==='comida'?'Comida rápida':'Antojo rápido',amt,ts:Date.now()};
+  const item={cat,desc:cat==='comida'?'Comida rápida':cat==='antojo'?'Antojo rápido':'Bebida rápida',amt,ts:Date.now()};
   let id;
   try{id=await dbAdd(item);}catch(e){console.error(e);}
   item.id=id;
@@ -287,7 +288,8 @@ function render(){
   getAlert(pct,remain);
   const comidaAmt=expenses.filter(e=>e.cat==='comida').reduce((s,e)=>s+e.amt,0);
   const antojoAmt=expenses.filter(e=>e.cat==='antojo').reduce((s,e)=>s+e.amt,0);
-  const combo=[{name:'Comida',amt:comidaAmt,cls:'comida',color:'#06d6a0'},{name:'Antojos',amt:antojoAmt,cls:'antojo',color:'#ffd166'}];
+  const bebidasAmt=expenses.filter(e=>e.cat==='bebidas').reduce((s,e)=>s+e.amt,0);
+  const combo=[{name:'Comida',amt:comidaAmt,cls:'comida',color:'#06d6a0'},{name:'Antojos',amt:antojoAmt,cls:'antojo',color:'#ffd166'},{name:'Bebidas',amt:bebidasAmt,cls:'bebidas',color:'#66b3ff'}];
   let catHTML='';
   combo.forEach(c=>{
     const cpct=spent>0?Math.round((c.amt/spent)*100):0;
