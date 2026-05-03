@@ -1,4 +1,4 @@
-const CACHE_NAME = 'delivery-tracker-v8';
+const CACHE_NAME = 'delivery-tracker-v9';
 
 self.addEventListener('install', (e) => {
   e.waitUntil(
