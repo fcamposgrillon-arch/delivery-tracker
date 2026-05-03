@@ -56,8 +56,8 @@
   .history-item:last-child{border-bottom:none}
   .hi-left{display:flex;align-items:center;gap:8px}
   .hi-cat{font-size:0.6rem;padding:2px 7px;border-radius:10px;font-weight:600}
-  .hi-cat.comida{background:#002a1a;color:#06d6a0}
-  .hi-cat.antojo{background:#2a1f00;color:#ffd166}
+  .hi-cat.delivery{background:#002a1a;color:#06d6a0}
+  .hi-cat.comida{background:#2a1f00;color:#ffd166}
   .hi-cat.bebidas{background:#0a1a2a;color:#66b3ff}
   .hi-desc{font-size:0.8rem}
   .hi-date{font-size:0.6rem;color:#555}
@@ -65,18 +65,9 @@
   .hi-del{background:none;border:none;color:#333;cursor:pointer;font-size:0.9rem;padding:2px 4px;margin-left:6px}
   .hi-del:hover{color:#ff4d4d}
   .empty{text-align:center;color:#333;font-size:0.75rem;padding:14px 0}
-  .cat-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
-  .cat-name{font-size:0.75rem}
-  .cat-bar-bg{flex:1;height:6px;background:#1a1a1a;border-radius:4px;margin:0 8px;overflow:hidden}
-  .cat-bar-fg{height:100%;border-radius:4px;transition:width 0.4s}
-  .cat-amt{font-size:0.75rem;font-weight:600;min-width:80px;text-align:right}
-  .section-divider{font-size:0.65rem;color:#555;text-transform:uppercase;letter-spacing:1px;margin:16px 0 8px;text-align:center}
   .total-banner{background:#1a1a1a;border-radius:10px;padding:10px;margin-bottom:12px;text-align:center}
   .total-label{font-size:0.6rem;color:#666;text-transform:uppercase;letter-spacing:1px}
   .total-val{font-size:1.1rem;font-weight:700;color:#e8b4f0}
-  .sub-bar-outer{background:#1a1a1a;border-radius:8px;height:18px;overflow:hidden;position:relative;margin:4px 0}
-  .sub-bar-inner{height:100%;border-radius:8px;transition:width 0.6s ease,background 0.6s ease}
-  .sub-bar-pct{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:0.6rem;font-weight:700;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,0.9)}
 </style>
 </head>
 <body>
@@ -87,13 +78,13 @@
 
   <!-- Total banner -->
   <div class="total-banner">
-    <div class="total-label">Total disponible</div>
-    <div class="total-val" id="totalBudget">₲ 1.650.000</div>
+    <div class="total-label">Total mensual</div>
+    <div class="total-val">₲ 1.950.000</div>
   </div>
 
   <!-- DELIVERY CARD -->
   <div class="card">
-    <div class="card-label" style="color:#06d6a0">🍽️ Delivery</div>
+    <div class="card-label" style="color:#06d6a0">🛵 Delivery</div>
     <div class="hero-row">
       <div><div class="card-label">Presupuesto</div><div class="hero-amount safe" id="delAmt">₲ 900.000</div></div>
       <div style="text-align:right"><div class="card-label">Restante</div><div class="hero-amount safe" id="delRemain" style="font-size:1.3rem">₲ 900.000</div></div>
@@ -104,12 +95,30 @@
       <div class="stat-box"><div class="stat-val" id="delCount" style="color:#e8b4f0">0</div><div class="stat-lbl">Pedidos</div></div>
       <div class="stat-box"><div class="stat-val" id="delAvg" style="color:#aaa">—</div><div class="stat-lbl">Promedio</div></div>
     </div>
-    <!-- Sub-categories -->
-    <div id="delCats" style="margin-top:8px"></div>
-    <div class="projection ok" id="delProj" style="margin-top:10px">
+    <div class="projection ok" id="delProj">
       <div class="proj-title">📈 Proyección delivery</div>
       <div class="proj-val" id="delProjVal">Sin datos todavía</div>
       <div class="proj-sub" id="delProjSub">Agregá pedidos para ver la proyección</div>
+    </div>
+  </div>
+
+  <!-- COMIDA (CASA) CARD -->
+  <div class="card">
+    <div class="card-label" style="color:#ffd166">🍳 Comida (casa)</div>
+    <div class="hero-row">
+      <div><div class="card-label">Presupuesto</div><div class="hero-amount safe" id="comAmt" style="font-size:1.4rem">₲ 750.000</div></div>
+      <div style="text-align:right"><div class="card-label">Restante</div><div class="hero-amount safe" id="comRemain" style="font-size:1.1rem">₲ 750.000</div></div>
+    </div>
+    <div class="bar-outer"><div class="bar-inner" id="comBar" style="width:0%;background:#ffd166"></div><span class="bar-pct" id="comPct">0%</span></div>
+    <div class="stats-grid">
+      <div class="stat-box"><div class="stat-val" id="comSpent" style="color:#ff6b6b">₲ 0</div><div class="stat-lbl">Gastado</div></div>
+      <div class="stat-box"><div class="stat-val" id="comCount" style="color:#ffd166">0</div><div class="stat-lbl">Compras</div></div>
+      <div class="stat-box"><div class="stat-val" id="comAvg" style="color:#aaa">—</div><div class="stat-lbl">Promedio</div></div>
+    </div>
+    <div class="projection ok" id="comProj">
+      <div class="proj-title">📈 Proyección comida</div>
+      <div class="proj-val" id="comProjVal">Sin datos todavía</div>
+      <div class="proj-sub" id="comProjSub">Agregá compras para ver la proyección</div>
     </div>
   </div>
 
@@ -117,14 +126,14 @@
   <div class="card">
     <div class="card-label" style="color:#66b3ff">🥤 Bebidas</div>
     <div class="hero-row">
-      <div><div class="card-label">Presupuesto</div><div class="hero-amount safe" id="bebAmt" style="font-size:1.4rem">₲ 750.000</div></div>
-      <div style="text-align:right"><div class="card-label">Restante</div><div class="hero-amount safe" id="bebRemain" style="font-size:1.1rem">₲ 750.000</div></div>
+      <div><div class="card-label">Presupuesto</div><div class="hero-amount safe" id="bebAmt" style="font-size:1.4rem">₲ 300.000</div></div>
+      <div style="text-align:right"><div class="card-label">Restante</div><div class="hero-amount safe" id="bebRemain" style="font-size:1.1rem">₲ 300.000</div></div>
     </div>
     <div class="bar-outer"><div class="bar-inner" id="bebBar" style="width:0%;background:#66b3ff"></div><span class="bar-pct" id="bebPct">0%</span></div>
     <div class="stats-grid">
       <div class="stat-box"><div class="stat-val" id="bebSpent" style="color:#ff6b6b">₲ 0</div><div class="stat-lbl">Gastado</div></div>
       <div class="stat-box"><div class="stat-val" id="bebCount" style="color:#66b3ff">0</div><div class="stat-lbl">Compras</div></div>
-      <div class="stat-box"><div class="stat-val" id="bebAvg" style="color:#aaa">—</div><div class="stat-lbl">Prom/día</div></div>
+      <div class="stat-box"><div class="stat-val" id="bebAvg" style="color:#aaa">—</div><div class="stat-lbl">Promedio</div></div>
     </div>
     <div class="projection ok" id="bebProj">
       <div class="proj-title">📈 Proyección bebidas</div>
@@ -137,7 +146,7 @@
   <div class="card">
     <div class="card-label">Agregar gasto</div>
     <div class="form-row">
-      <select class="category-select" id="catInput"><option value="comida">🍽️ Comida</option><option value="antojo">🧁 Antojo</option><option value="bebidas">🥤 Bebidas</option></select>
+      <select class="category-select" id="catInput"><option value="delivery">🛵 Delivery</option><option value="comida">🍳 Comida</option><option value="bebidas">🥤 Bebidas</option></select>
       <input type="text" id="descInput" placeholder="Ej: PedidoYa Burger" maxlength="35">
     </div>
     <div class="form-row">
@@ -146,7 +155,7 @@
     </div>
     <div class="quick-row">
       <button class="quick-btn" onclick="quickAdd(9000)">⚡ 9k</button>
-      <button class="quick-btn" onclick="quickAdd(45000)">⚡ 45k</button>
+      <button class="quick-btn" onclick="quickAdd(30000)">⚡ 30k</button>
       <button class="quick-btn" onclick="quickAdd(65000)">⚡ 65k</button>
       <button class="quick-btn" onclick="quickAdd(100000)">⚡ 100k</button>
     </div>
@@ -165,13 +174,13 @@
   </div>
 </div>
 <script>
-const BUDGETS={delivery:900000,bebidas:750000};
+const BUDGETS={delivery:900000,comida:750000,bebidas:300000};
+const TOTAL_BUDGET=1950000;
 const DB_NAME='deliveryTracker';
 const STORE_NAME='expenses';
 let db=null;
 let expenses=[];
 
-// --- IndexedDB ---
 function openDB(){
   return new Promise((resolve,reject)=>{
     const req=indexedDB.open(DB_NAME,1);
@@ -185,7 +194,6 @@ function openDB(){
     req.onerror=()=>reject(req.error);
   });
 }
-
 function dbAdd(item){
   return new Promise((resolve,reject)=>{
     const tx=db.transaction(STORE_NAME,'readwrite');
@@ -195,7 +203,6 @@ function dbAdd(item){
     req.onerror=()=>reject(req.error);
   });
 }
-
 function dbGetAll(){
   return new Promise((resolve,reject)=>{
     const tx=db.transaction(STORE_NAME,'readonly');
@@ -205,7 +212,6 @@ function dbGetAll(){
     req.onerror=()=>reject(req.error);
   });
 }
-
 function dbDelete(id){
   return new Promise((resolve,reject)=>{
     const tx=db.transaction(STORE_NAME,'readwrite');
@@ -215,7 +221,6 @@ function dbDelete(id){
     req.onerror=()=>reject(req.error);
   });
 }
-
 function dbClear(){
   return new Promise((resolve,reject)=>{
     const tx=db.transaction(STORE_NAME,'readwrite');
@@ -226,7 +231,6 @@ function dbClear(){
   });
 }
 
-// --- Init ---
 async function init(){
   try{
     await openDB();
@@ -248,10 +252,11 @@ async function init(){
   render();
 }
 
-// --- Actions ---
+const DEFAULT_DESC={delivery:'Delivery',comida:'Compra',bebidas:'Bebida'};
+
 async function addExpense(){
   const cat=document.getElementById('catInput').value;
-  const desc=document.getElementById('descInput').value.trim()||(cat==='comida'?'Comida':cat==='antojo'?'Antojo':'Bebida');
+  const desc=document.getElementById('descInput').value.trim()||DEFAULT_DESC[cat];
   const amt=parseInt(document.getElementById('amtInput').value);
   if(!amt||amt<=0)return;
   const item={cat,desc,amt,ts:Date.now()};
@@ -266,7 +271,8 @@ async function addExpense(){
 
 async function quickAdd(amt){
   const cat=document.getElementById('catInput').value;
-  const item={cat,desc:cat==='comida'?'Comida rápida':cat==='antojo'?'Antojo rápido':'Bebida rápida',amt,ts:Date.now()};
+  const labels={delivery:'Delivery rápido',comida:'Compra rápida',bebidas:'Bebida rápida'};
+  const item={cat,desc:labels[cat],amt,ts:Date.now()};
   let id;
   try{id=await dbAdd(item);}catch(e){console.error(e);}
   item.id=id;
@@ -278,9 +284,7 @@ async function deleteExpense(idx){
   const item=expenses[idx];
   expenses.splice(idx,1);
   render();
-  try{
-    if(item.id!==undefined) await dbDelete(item.id);
-  }catch(e){console.error(e);}
+  try{if(item.id!==undefined)await dbDelete(item.id);}catch(e){console.error(e);}
 }
 
 async function resetAll(){
@@ -297,50 +301,21 @@ function getTimeStr(ts){return new Date(ts).toLocaleString('es-PY',{day:'2-digit
 function getBarColor(pct){if(pct>=100)return '#ff2020';if(pct>=90)return '#ff4d4d';if(pct>=80)return '#ff8c42';if(pct>=70)return '#ffd166';return '#06d6a0';}
 function getHeroClass(remain,pct){if(remain<0)return 'over';if(pct>=100)return 'critical';if(pct>=90)return 'danger';if(pct>=70)return 'warn';return 'safe';}
 
-function getAlert(pct,remain,label){
-  const box=document.getElementById('alertBox');
-  if(remain<0){showAlert(box,'alert-red','🚫 ¡'+label+' PASADO! — '+fmt(Math.abs(remain))+' arriba del cupo');}
-  else if(pct>=100){showAlert(box,'alert-red','🚨 '+label+' AGOTADO — Cero hasta el próximo mes');}
-  else if(pct>=90){showAlert(box,'alert-orange','🔥 '+label+' modo estricto — Quedan '+fmt(remain));}
-  else if(pct>=80){showAlert(box,'alert-yellow','⚠️ '+label+' al 80% — Cuidado con el ritmo');}
-  else{box.className='alert';box.style.display='none';}
-}
 function showAlert(el,cls,msg){el.className='alert show '+cls;el.textContent=msg;}
 
-function renderSection(items,budget,prefix,catConfigs,projPrefix){
+function renderSection(items,budget,prefix){
   const now=new Date();const today=now.getDate();const daysInMonth=getDaysInMonth();const daysElapsed=today;const daysRemaining=daysInMonth-today+1;
   const spent=items.reduce((s,e)=>s+e.amt,0);
   const remain=budget-spent;
   const pct=Math.min(100,Math.round((spent/budget)*100));
   const avg=items.length>0?Math.round(spent/items.length):0;
   const heroClass=getHeroClass(remain,pct);
-
-  // Hero
-  document.getElementById(prefix+'Amt').textContent=fmt(budget);
   const remEl=document.getElementById(prefix+'Remain');remEl.textContent=fmt(remain);remEl.className='hero-amount '+heroClass;
-  if(prefix==='del'){document.getElementById(prefix+'Amt').className='hero-amount safe';}
-
-  // Bar
   const bc=getBarColor(pct);const bar=document.getElementById(prefix+'Bar');bar.style.width=pct+'%';bar.style.background=bc;
   document.getElementById(prefix+'Pct').textContent=pct+'%';
-
-  // Stats
   document.getElementById(prefix+'Spent').textContent=fmt(spent);
   document.getElementById(prefix+'Count').textContent=items.length;
   document.getElementById(prefix+'Avg').textContent=items.length>0?fmt(avg):'—';
-
-  // Sub-categories (delivery only)
-  if(catConfigs){
-    let catHTML='';
-    catConfigs.forEach(c=>{
-      const cAmt=items.filter(e=>e.cat===c.key).reduce((s,e)=>s+e.amt,0);
-      const cpct=spent>0?Math.round((cAmt/spent)*100):0;
-      catHTML+=`<div class="cat-row"><span class="cat-name">${c.name}</span><div class="cat-bar-bg"><div class="cat-bar-fg" style="width:${cpct}%;background:${c.color}"></div></div><span class="cat-amt">${fmt(cAmt)} (${cpct}%)</span></div>`;
-    });
-    document.getElementById('delCats').innerHTML=catHTML;
-  }
-
-  // Projection
   const projBox=document.getElementById(prefix+'Proj');
   const projVal=document.getElementById(prefix+'ProjVal');
   const projSub=document.getElementById(prefix+'ProjSub');
@@ -366,24 +341,27 @@ function renderSection(items,budget,prefix,catConfigs,projPrefix){
 
 function render(){
   document.getElementById('dayBadge').textContent='Día '+new Date().getDate()+'/'+getDaysInMonth();
-
-  const delItems=expenses.filter(e=>e.cat==='comida'||e.cat==='antojo');
+  const delItems=expenses.filter(e=>e.cat==='delivery');
+  const comItems=expenses.filter(e=>e.cat==='comida');
   const bebItems=expenses.filter(e=>e.cat==='bebidas');
-
-  // Render delivery section
-  renderSection(delItems,BUDGETS.delivery,'del',[{key:'comida',name:'Comida',color:'#06d6a0'},{key:'antojo',name:'Antojos',color:'#ffd166'}],'del');
-
-  // Render bebidas section
-  renderSection(bebItems,BUDGETS.bebidas,'beb',null,'beb');
-
-  // Alert: show the most critical one
-  const delSpent=delItems.reduce((s,e)=>s+e.amt,0);
-  const bebSpent=bebItems.reduce((s,e)=>s+e.amt,0);
-  const delPct=Math.round((delSpent/BUDGETS.delivery)*100);
-  const bebPct=Math.round((bebSpent/BUDGETS.bebidas)*100);
-  if(delPct>=bebPct){getAlert(delPct,BUDGETS.delivery-delSpent,'Delivery');}
-  else{getAlert(bebPct,BUDGETS.bebidas-bebSpent,'Bebidas');}
-
+  renderSection(delItems,BUDGETS.delivery,'del');
+  renderSection(comItems,BUDGETS.comida,'com');
+  renderSection(bebItems,BUDGETS.bebidas,'beb');
+  // Alert: show the most critical
+  const alerts=[];
+  [{items:delItems,budget:BUDGETS.delivery,label:'Delivery'},{items:comItems,budget:BUDGETS.comida,label:'Comida'},{items:bebItems,budget:BUDGETS.bebidas,label:'Bebidas'}].forEach(s=>{
+    const sp=s.items.reduce((a,e)=>a+e.amt,0);
+    const p=Math.round((sp/s.budget)*100);
+    alerts.push({pct:p,remain:s.budget-sp,label:s.label});
+  });
+  alerts.sort((a,b)=>b.pct-a.pct);
+  const top=alerts[0];
+  const box=document.getElementById('alertBox');
+  if(top.remain<0){showAlert(box,'alert-red','🚫 ¡'+top.label+' PASADO! — '+fmt(Math.abs(top.remain))+' arriba');}
+  else if(top.pct>=100){showAlert(box,'alert-red','🚨 '+top.label+' AGOTADO');}
+  else if(top.pct>=90){showAlert(box,'alert-orange','🔥 '+top.label+' modo estricto — Quedan '+fmt(top.remain));}
+  else if(top.pct>=80){showAlert(box,'alert-yellow','⚠️ '+top.label+' al '+top.pct+'%');}
+  else{box.className='alert';box.style.display='none';}
   // History
   const list=document.getElementById('historyList');
   if(expenses.length===0){list.innerHTML='<div class="empty">Sin gastos todavía</div>';}
@@ -394,8 +372,6 @@ function render(){
 
 document.getElementById('amtInput').addEventListener('keydown',function(e){if(e.key==='Enter')addExpense();});
 
-
-// --- Export / Import ---
 function exportData(){
   var data={expenses:expenses,exportedAt:new Date().toISOString()};
   var blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
@@ -424,18 +400,13 @@ function importData(event){
           });
         }
         alert('✅ Restaurados '+expenses.length+' gastos');
-      }else{
-        alert('❌ Archivo no válido');
-      }
-    }catch(err){
-      alert('❌ Error al leer el archivo: '+err);
-    }
+      }else{alert('❌ Archivo no válido');}
+    }catch(err){alert('❌ Error: '+err);}
   };
   reader.readAsText(file);
   event.target.value='';
 }
 
-// Start
 init();
 </script>
 <script>
