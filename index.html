@@ -70,6 +70,13 @@
   .cat-bar-bg{flex:1;height:6px;background:#1a1a1a;border-radius:4px;margin:0 8px;overflow:hidden}
   .cat-bar-fg{height:100%;border-radius:4px;transition:width 0.4s}
   .cat-amt{font-size:0.75rem;font-weight:600;min-width:80px;text-align:right}
+  .section-divider{font-size:0.65rem;color:#555;text-transform:uppercase;letter-spacing:1px;margin:16px 0 8px;text-align:center}
+  .total-banner{background:#1a1a1a;border-radius:10px;padding:10px;margin-bottom:12px;text-align:center}
+  .total-label{font-size:0.6rem;color:#666;text-transform:uppercase;letter-spacing:1px}
+  .total-val{font-size:1.1rem;font-weight:700;color:#e8b4f0}
+  .sub-bar-outer{background:#1a1a1a;border-radius:8px;height:18px;overflow:hidden;position:relative;margin:4px 0}
+  .sub-bar-inner{height:100%;border-radius:8px;transition:width 0.6s ease,background 0.6s ease}
+  .sub-bar-pct{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:0.6rem;font-weight:700;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,0.9)}
 </style>
 </head>
 <body>
@@ -77,29 +84,58 @@
   <h1>🍔 Delivery Tracker</h1>
   <p class="subtitle">Cupo mensual — <span id="dayBadge" class="day-badge"></span></p>
   <div id="alertBox" class="alert"></div>
+
+  <!-- Total banner -->
+  <div class="total-banner">
+    <div class="total-label">Total disponible</div>
+    <div class="total-val" id="totalBudget">₲ 1.650.000</div>
+  </div>
+
+  <!-- DELIVERY CARD -->
   <div class="card">
+    <div class="card-label" style="color:#06d6a0">🍽️ Delivery</div>
     <div class="hero-row">
-      <div><div class="card-label">Presupuesto</div><div class="hero-amount safe" id="heroAmt">₲ 900.000</div></div>
-      <div style="text-align:right"><div class="card-label">Restante</div><div class="hero-amount safe" id="remainAmt" style="font-size:1.3rem">₲ 900.000</div></div>
+      <div><div class="card-label">Presupuesto</div><div class="hero-amount safe" id="delAmt">₲ 900.000</div></div>
+      <div style="text-align:right"><div class="card-label">Restante</div><div class="hero-amount safe" id="delRemain" style="font-size:1.3rem">₲ 900.000</div></div>
     </div>
-    <div class="bar-outer"><div class="bar-inner" id="barFill" style="width:0%;background:#06d6a0"></div><span class="bar-pct" id="barPct">0%</span></div>
+    <div class="bar-outer"><div class="bar-inner" id="delBar" style="width:0%;background:#06d6a0"></div><span class="bar-pct" id="delPct">0%</span></div>
     <div class="stats-grid">
-      <div class="stat-box"><div class="stat-val" id="spentVal" style="color:#ff6b6b">₲ 0</div><div class="stat-lbl">Gastado</div></div>
-      <div class="stat-box"><div class="stat-val" id="countVal" style="color:#e8b4f0">0</div><div class="stat-lbl">Pedidos</div></div>
-      <div class="stat-box"><div class="stat-val" id="avgVal" style="color:#aaa">—</div><div class="stat-lbl">Promedio</div></div>
+      <div class="stat-box"><div class="stat-val" id="delSpent" style="color:#ff6b6b">₲ 0</div><div class="stat-lbl">Gastado</div></div>
+      <div class="stat-box"><div class="stat-val" id="delCount" style="color:#e8b4f0">0</div><div class="stat-lbl">Pedidos</div></div>
+      <div class="stat-box"><div class="stat-val" id="delAvg" style="color:#aaa">—</div><div class="stat-lbl">Promedio</div></div>
     </div>
-    <div id="catBreakdown" style="margin-top:10px"></div>
-  </div>
-  <div class="card">
-    <div class="card-label">📈 Proyección</div>
-    <div class="projection ok" id="projBox">
-      <div class="proj-title">Si seguís a este ritmo...</div>
-      <div class="proj-val" id="projVal">Sin datos todavía</div>
-      <div class="proj-sub" id="projSub">Agregá pedidos para ver la proyección</div>
+    <!-- Sub-categories -->
+    <div id="delCats" style="margin-top:8px"></div>
+    <div class="projection ok" id="delProj" style="margin-top:10px">
+      <div class="proj-title">📈 Proyección delivery</div>
+      <div class="proj-val" id="delProjVal">Sin datos todavía</div>
+      <div class="proj-sub" id="delProjSub">Agregá pedidos para ver la proyección</div>
     </div>
   </div>
+
+  <!-- BEBIDAS CARD -->
   <div class="card">
-    <div class="card-label">Agregar pedido</div>
+    <div class="card-label" style="color:#66b3ff">🥤 Bebidas</div>
+    <div class="hero-row">
+      <div><div class="card-label">Presupuesto</div><div class="hero-amount safe" id="bebAmt" style="font-size:1.4rem">₲ 750.000</div></div>
+      <div style="text-align:right"><div class="card-label">Restante</div><div class="hero-amount safe" id="bebRemain" style="font-size:1.1rem">₲ 750.000</div></div>
+    </div>
+    <div class="bar-outer"><div class="bar-inner" id="bebBar" style="width:0%;background:#66b3ff"></div><span class="bar-pct" id="bebPct">0%</span></div>
+    <div class="stats-grid">
+      <div class="stat-box"><div class="stat-val" id="bebSpent" style="color:#ff6b6b">₲ 0</div><div class="stat-lbl">Gastado</div></div>
+      <div class="stat-box"><div class="stat-val" id="bebCount" style="color:#66b3ff">0</div><div class="stat-lbl">Compras</div></div>
+      <div class="stat-box"><div class="stat-val" id="bebAvg" style="color:#aaa">—</div><div class="stat-lbl">Prom/día</div></div>
+    </div>
+    <div class="projection ok" id="bebProj">
+      <div class="proj-title">📈 Proyección bebidas</div>
+      <div class="proj-val" id="bebProjVal">Sin datos todavía</div>
+      <div class="proj-sub" id="bebProjSub">Agregá compras para ver la proyección</div>
+    </div>
+  </div>
+
+  <!-- ADD FORM -->
+  <div class="card">
+    <div class="card-label">Agregar gasto</div>
     <div class="form-row">
       <select class="category-select" id="catInput"><option value="comida">🍽️ Comida</option><option value="antojo">🧁 Antojo</option><option value="bebidas">🥤 Bebidas</option></select>
       <input type="text" id="descInput" placeholder="Ej: PedidoYa Burger" maxlength="35">
@@ -109,15 +145,17 @@
       <button class="btn btn-add" onclick="addExpense()">Agregar</button>
     </div>
     <div class="quick-row">
+      <button class="quick-btn" onclick="quickAdd(9000)">⚡ 9k</button>
       <button class="quick-btn" onclick="quickAdd(45000)">⚡ 45k</button>
       <button class="quick-btn" onclick="quickAdd(65000)">⚡ 65k</button>
-      <button class="quick-btn" onclick="quickAdd(80000)">⚡ 80k</button>
       <button class="quick-btn" onclick="quickAdd(100000)">⚡ 100k</button>
     </div>
   </div>
+
+  <!-- HISTORY -->
   <div class="card">
     <div class="history-title">📋 Historial</div>
-    <div id="historyList"><div class="empty">Sin pedidos todavía</div></div>
+    <div id="historyList"><div class="empty">Sin gastos todavía</div></div>
     <button class="btn btn-reset" onclick="resetAll()">🔄 Reiniciar mes</button>
     <div style="display:flex;gap:6px;margin-top:6px">
       <button class="btn btn-reset" onclick="exportData()" style="font-size:0.7rem;padding:6px">💾 Backup</button>
@@ -127,7 +165,7 @@
   </div>
 </div>
 <script>
-const BUDGET=900000;
+const BUDGETS={delivery:900000,bebidas:750000};
 const DB_NAME='deliveryTracker';
 const STORE_NAME='expenses';
 let db=null;
@@ -192,7 +230,6 @@ function dbClear(){
 async function init(){
   try{
     await openDB();
-    // Auto-reset if month changed
     var currentMonth=new Date().getFullYear()+'-'+String(new Date().getMonth()+1).padStart(2,'0');
     var savedMonth=localStorage.getItem('dt_month');
     if(savedMonth!==currentMonth){
@@ -260,67 +297,96 @@ function getTimeStr(ts){return new Date(ts).toLocaleString('es-PY',{day:'2-digit
 function getBarColor(pct){if(pct>=100)return '#ff2020';if(pct>=90)return '#ff4d4d';if(pct>=80)return '#ff8c42';if(pct>=70)return '#ffd166';return '#06d6a0';}
 function getHeroClass(remain,pct){if(remain<0)return 'over';if(pct>=100)return 'critical';if(pct>=90)return 'danger';if(pct>=70)return 'warn';return 'safe';}
 
-function getAlert(pct,remain){
+function getAlert(pct,remain,label){
   const box=document.getElementById('alertBox');
-  if(remain<0){showAlert(box,'alert-red','🚫 ¡TE PASASTE! — Estás '+fmt(Math.abs(remain))+' arriba del cupo');}
-  else if(pct>=100){showAlert(box,'alert-red','🚨 CUPÓN AGOTADO — Cero delivery hasta el próximo mes');}
-  else if(pct>=90){showAlert(box,'alert-orange','🔥 Modo estricto — Solo lo esencial. Te queda '+fmt(remain));}
-  else if(pct>=80){showAlert(box,'alert-yellow','⚠️ Cuidado — 80% usado. Priorizá comida real sobre antojos');}
-  else if(pct>=50){showAlert(box,'alert-green','✅ Bien — Vas gastando con criterio. Queda '+fmt(remain));}
+  if(remain<0){showAlert(box,'alert-red','🚫 ¡'+label+' PASADO! — '+fmt(Math.abs(remain))+' arriba del cupo');}
+  else if(pct>=100){showAlert(box,'alert-red','🚨 '+label+' AGOTADO — Cero hasta el próximo mes');}
+  else if(pct>=90){showAlert(box,'alert-orange','🔥 '+label+' modo estricto — Quedan '+fmt(remain));}
+  else if(pct>=80){showAlert(box,'alert-yellow','⚠️ '+label+' al 80% — Cuidado con el ritmo');}
   else{box.className='alert';box.style.display='none';}
 }
 function showAlert(el,cls,msg){el.className='alert show '+cls;el.textContent=msg;}
 
-function render(){
+function renderSection(items,budget,prefix,catConfigs,projPrefix){
   const now=new Date();const today=now.getDate();const daysInMonth=getDaysInMonth();const daysElapsed=today;const daysRemaining=daysInMonth-today+1;
-  document.getElementById('dayBadge').textContent='Día '+today+'/'+daysInMonth;
-  const spent=expenses.reduce((s,e)=>s+e.amt,0);
-  const remain=BUDGET-spent;
-  const pct=Math.min(100,Math.round((spent/BUDGET)*100));
-  const avg=expenses.length>0?Math.round(spent/expenses.length):0;
+  const spent=items.reduce((s,e)=>s+e.amt,0);
+  const remain=budget-spent;
+  const pct=Math.min(100,Math.round((spent/budget)*100));
+  const avg=items.length>0?Math.round(spent/items.length):0;
   const heroClass=getHeroClass(remain,pct);
-  const remEl=document.getElementById('remainAmt');remEl.textContent=fmt(remain);remEl.className='hero-amount '+heroClass;
-  document.getElementById('spentVal').textContent=fmt(spent);
-  document.getElementById('countVal').textContent=expenses.length;
-  document.getElementById('avgVal').textContent=expenses.length>0?fmt(avg):'—';
-  const bc=getBarColor(pct);const bar=document.getElementById('barFill');bar.style.width=pct+'%';bar.style.background=bc;
-  document.getElementById('barPct').textContent=pct+'%';
-  getAlert(pct,remain);
-  const comidaAmt=expenses.filter(e=>e.cat==='comida').reduce((s,e)=>s+e.amt,0);
-  const antojoAmt=expenses.filter(e=>e.cat==='antojo').reduce((s,e)=>s+e.amt,0);
-  const bebidasAmt=expenses.filter(e=>e.cat==='bebidas').reduce((s,e)=>s+e.amt,0);
-  const combo=[{name:'Comida',amt:comidaAmt,cls:'comida',color:'#06d6a0'},{name:'Antojos',amt:antojoAmt,cls:'antojo',color:'#ffd166'},{name:'Bebidas',amt:bebidasAmt,cls:'bebidas',color:'#66b3ff'}];
-  let catHTML='';
-  combo.forEach(c=>{
-    const cpct=spent>0?Math.round((c.amt/spent)*100):0;
-    catHTML+=`<div class="cat-row"><span class="cat-name">${c.name}</span><div class="cat-bar-bg"><div class="cat-bar-fg" style="width:${cpct}%;background:${c.color}"></div></div><span class="cat-amt">${fmt(c.amt)} (${cpct}%)</span></div>`;
-  });
-  document.getElementById('catBreakdown').innerHTML=catHTML;
+
+  // Hero
+  document.getElementById(prefix+'Amt').textContent=fmt(budget);
+  const remEl=document.getElementById(prefix+'Remain');remEl.textContent=fmt(remain);remEl.className='hero-amount '+heroClass;
+  if(prefix==='del'){document.getElementById(prefix+'Amt').className='hero-amount safe';}
+
+  // Bar
+  const bc=getBarColor(pct);const bar=document.getElementById(prefix+'Bar');bar.style.width=pct+'%';bar.style.background=bc;
+  document.getElementById(prefix+'Pct').textContent=pct+'%';
+
+  // Stats
+  document.getElementById(prefix+'Spent').textContent=fmt(spent);
+  document.getElementById(prefix+'Count').textContent=items.length;
+  document.getElementById(prefix+'Avg').textContent=items.length>0?fmt(avg):'—';
+
+  // Sub-categories (delivery only)
+  if(catConfigs){
+    let catHTML='';
+    catConfigs.forEach(c=>{
+      const cAmt=items.filter(e=>e.cat===c.key).reduce((s,e)=>s+e.amt,0);
+      const cpct=spent>0?Math.round((cAmt/spent)*100):0;
+      catHTML+=`<div class="cat-row"><span class="cat-name">${c.name}</span><div class="cat-bar-bg"><div class="cat-bar-fg" style="width:${cpct}%;background:${c.color}"></div></div><span class="cat-amt">${fmt(cAmt)} (${cpct}%)</span></div>`;
+    });
+    document.getElementById('delCats').innerHTML=catHTML;
+  }
+
   // Projection
-  if(expenses.length>=2&&daysElapsed>0){
+  const projBox=document.getElementById(prefix+'Proj');
+  const projVal=document.getElementById(prefix+'ProjVal');
+  const projSub=document.getElementById(prefix+'ProjSub');
+  if(items.length>=2&&daysElapsed>0){
     const dailyAvg=spent/daysElapsed;
     const projected=Math.round(dailyAvg*daysInMonth);
-    const diff=projected-BUDGET;
-    const projBox=document.getElementById('projBox');
-    const projVal=document.getElementById('projVal');
-    const projSub=document.getElementById('projSub');
+    const diff=projected-budget;
     if(diff>0){
       projBox.className='projection over';
       projVal.textContent='Proyectás '+fmt(projected)+' — te pasás '+fmt(diff);
-      projSub.textContent='Ritmo: '+fmt(Math.round(dailyAvg))+'/día. Máx recomendado: '+fmt(Math.round(remain/Math.max(1,daysRemaining)))+'/día';
+      projSub.textContent='Ritmo: '+fmt(Math.round(dailyAvg))+'/día. Máx: '+fmt(Math.round(remain/Math.max(1,daysRemaining)))+'/día';
     } else {
       projBox.className='projection ok';
       projVal.textContent='Proyectás '+fmt(projected)+' — sobra '+fmt(Math.abs(diff));
       projSub.textContent='Ritmo: '+fmt(Math.round(dailyAvg))+'/día. Bien ahí 👊';
     }
-  } else if(expenses.length===1){
-    document.getElementById('projBox').className='projection ok';
-    document.getElementById('projVal').textContent=fmt(expenses[0].amt)+' — muy temprano para proyectar';
-    document.getElementById('projSub').textContent='Después de 2 pedidos se activa la proyección';
+  } else if(items.length===1){
+    projBox.className='projection ok';
+    projVal.textContent=fmt(items[0].amt)+' — muy temprano para proyectar';
+    projSub.textContent='Después de 2 registros se activa la proyección';
   }
+}
+
+function render(){
+  document.getElementById('dayBadge').textContent='Día '+new Date().getDate()+'/'+getDaysInMonth();
+
+  const delItems=expenses.filter(e=>e.cat==='comida'||e.cat==='antojo');
+  const bebItems=expenses.filter(e=>e.cat==='bebidas');
+
+  // Render delivery section
+  renderSection(delItems,BUDGETS.delivery,'del',[{key:'comida',name:'Comida',color:'#06d6a0'},{key:'antojo',name:'Antojos',color:'#ffd166'}],'del');
+
+  // Render bebidas section
+  renderSection(bebItems,BUDGETS.bebidas,'beb',null,'beb');
+
+  // Alert: show the most critical one
+  const delSpent=delItems.reduce((s,e)=>s+e.amt,0);
+  const bebSpent=bebItems.reduce((s,e)=>s+e.amt,0);
+  const delPct=Math.round((delSpent/BUDGETS.delivery)*100);
+  const bebPct=Math.round((bebSpent/BUDGETS.bebidas)*100);
+  if(delPct>=bebPct){getAlert(delPct,BUDGETS.delivery-delSpent,'Delivery');}
+  else{getAlert(bebPct,BUDGETS.bebidas-bebSpent,'Bebidas');}
+
   // History
   const list=document.getElementById('historyList');
-  if(expenses.length===0){list.innerHTML='<div class="empty">Sin pedidos todavía</div>';}
+  if(expenses.length===0){list.innerHTML='<div class="empty">Sin gastos todavía</div>';}
   else{
     list.innerHTML=expenses.map((e,i)=>`<div class="history-item"><div class="hi-left"><span class="hi-cat ${e.cat}">${e.cat}</span><div><div class="hi-desc">${e.desc}</div><div class="hi-date">${getTimeStr(e.ts)}</div></div></div><div style="display:flex;align-items:center"><span class="hi-amt">-${fmt(e.amt)}</span><button class="hi-del" onclick="deleteExpense(${i})">✕</button></div></div>`).join('');
   }
@@ -348,10 +414,8 @@ function importData(event){
     try{
       var data=JSON.parse(e.target.result);
       if(data.expenses&&Array.isArray(data.expenses)){
-        // Re-assign IDs from IndexedDB
         expenses=data.expenses.sort(function(a,b){return b.ts-a.ts;});
         render();
-        // Re-save all to IDB
         if(db){
           dbClear().then(function(){
             var tx=db.transaction('expenses','readwrite');
@@ -359,7 +423,7 @@ function importData(event){
             expenses.forEach(function(item){store.add(item);});
           });
         }
-        alert('✅ Restaurados '+expenses.length+' pedidos');
+        alert('✅ Restaurados '+expenses.length+' gastos');
       }else{
         alert('❌ Archivo no válido');
       }
